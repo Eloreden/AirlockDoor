@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AirlockDoor</RootNamespace>
     <AssemblyName>AirlockMechanizedDoor</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -37,24 +37,11 @@
     <Compile Include="AirlockDoorConfig.cs" />
     <Compile Include="AirlockDoorPatch.cs" />
     <Compile Include="DoorMod.cs" />
-    <Compile Include="OniLogger.cs" />
-    <Compile Include="OniUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="0Harmony.dll" />
-    <Content Include="Assembly-CSharp-firstpass.dll" />
-    <Content Include="Assembly-CSharp.dll" />
-    <Content Include="Unity.TextMeshPro.dll" />
-    <Content Include="UnityEngine.CoreModule.dll" />
-    <Content Include="UnityEngine.dll" />
-    <Content Include="UnityEngine.ImageConversionModule.dll" />
-    <Content Include="UnityEngine.UI.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="0Harmony, Version=1.2.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\0Harmony.dll</HintPath>
+    <Reference Include="0Harmony, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Lib.Harmony.2.0.4\lib\net45\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -81,6 +68,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>.\UnityEngine.UI.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
