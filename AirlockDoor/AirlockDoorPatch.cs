@@ -66,7 +66,7 @@ namespace AirlockDoor
         [HarmonyPatch(typeof(Db), "Initialize")]
         public static class Db_Initialize_Patch
         {
-            public static void Postfix()
+            public static void Prefix()
             {
                 Db.Get().Techs.Get("DirectedAirStreams").unlockedItemIDs.Add(AirlockDoorConfig.ID);
             }
