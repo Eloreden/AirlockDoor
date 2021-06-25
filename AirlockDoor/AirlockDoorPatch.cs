@@ -20,8 +20,6 @@ namespace AirlockDoor
             public override void OnLoad(Harmony harmony)
             {
                 harmony.PatchAll();
-                AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName, AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
-                AddBuildingToBuildMenu("Base", AirlockDoorConfig.ID);
                 Console.WriteLine($"[ AIRLOCK DOOR - MAIN ] OnLoad");
             }
         }
@@ -35,8 +33,7 @@ namespace AirlockDoor
                 if (!didStartupBuilding)
                 {
                     Console.WriteLine($"[ AIRLOCK DOOR - MAIN ] Prefix For Add Building");
-                    AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName,
-                        AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
+                    AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName,AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
                     AddBuildingToBuildMenu("Base", AirlockDoorConfig.ID);
                     didStartupBuilding = true;
                 }
@@ -72,10 +69,10 @@ namespace AirlockDoor
         [HarmonyPatch(typeof(Db), "Initialize")]
         public static class Db_Initialize_Patch
         {
-            public static void Prefix()
+            public static void Postfix()
             {
-                Console.WriteLine($"[ AIRLOCK DOOR - MAIN ] {Db.Get().Techs.Get("DirectedAirStreams").unlockedItemIDs}");
-                Db.Get().Techs.Get("DirectedAirStreams").unlockedItemIDs.Add(AirlockDoorConfig.ID);
+                Console.WriteLine($"[ AIRLOCK DOOR - MAIN ] {Db.Get().Techs.TryGet("DirectedAirStreams").unlockedItemIDs}");
+                Db.Get().Techs.TryGet("DirectedAirStreams").unlockedItemIDs.Add(AirlockDoorConfig.ID);
             }
         }
 
