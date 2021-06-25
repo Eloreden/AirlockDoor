@@ -20,16 +20,13 @@ namespace AirlockDoor
             public override void OnLoad(Harmony harmony)
             {
                 harmony.PatchAll();
-                AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName, AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
-                AddBuildingToBuildMenu("Base", AirlockDoorConfig.ID);
-                Console.WriteLine($"[ AIRLOCK DOOR - Vanilla ] OnLoad");
+                Console.WriteLine($"------------------- [ AIRLOCK DOOR - Vanilla ] OnLoad");
             }
         }
 
         [HarmonyPatch(typeof(GeneratedBuildings), "LoadGeneratedBuildings")]
         public static class GeneratedBuildings_LoadGeneratedBuildings_Path
         {
-            //Vanilla
             public static void Prefix()
             {
                 if (!didStartupBuilding)
@@ -41,34 +38,8 @@ namespace AirlockDoor
                     didStartupBuilding = true;
                 }
             }
-
-            //SpaceOut
-            //public static void Postfix()
-            //{
-            //    Console.WriteLine($"[ AIRLOCK DOOR ] Prefix For Add Building");
-            //    AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName,
-            //        AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
-            //    AddBuildingToBuildMenu("Base", AirlockDoorConfig.ID);
-            //    didStartupBuilding = true;
-            //}
         }
 
-        ////vanilla
-        //[HarmonyPatch(typeof(Db), "Initialize")]
-        //public static class Db_Initialize_Patch
-        //{
-        //    public static void Prefix()
-        //    {
-        //        if (!didStartupDb)
-        //        {
-        //            OniUtils.AddBuildingToTech("DirectedAirStreams", AirlockDoorConfig.ID);
-
-        //            didStartupDb = true;
-        //        }
-        //    }
-        //}
-
-        //Space Out
         [HarmonyPatch(typeof(Db), "Initialize")]
         public static class Db_Initialize_Patch
         {
@@ -78,15 +49,6 @@ namespace AirlockDoor
                 Db.Get().Techs.Get("DirectedAirStreams").unlockedItemIDs.Add(AirlockDoorConfig.ID);
             }
         }
-
-        #region Add Building to Menu
-        //Vanilla
-        //public static void AddBuildingToTech(string tech, string buildingid)
-        //{
-        //    var techlist = new List<string>(Techs.TECH_GROUPING[tech]);
-        //    techlist.Add(buildingid);
-        //    Techs.TECH_GROUPING[tech] = techlist.ToArray();
-        //}
 
         public static void AddBuildingToBuildMenu(HashedString category, string buildingid, string addAfterId = null)
         {
@@ -128,6 +90,5 @@ namespace AirlockDoor
             Strings.Add($"STRINGS.BUILDINGS.PREFABS.{id_up}.DESC", desc);
             Strings.Add($"STRINGS.BUILDINGS.PREFABS.{id_up}.EFFECT", effect);
         }
-        #endregion
     }
 }
