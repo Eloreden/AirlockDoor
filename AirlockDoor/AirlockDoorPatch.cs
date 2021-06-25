@@ -6,6 +6,7 @@ using ProcGen;
 using STRINGS;
 
 using BUILDINGS = TUNING.BUILDINGS;
+using System;
 
 namespace AirlockDoor
 {
@@ -14,10 +15,14 @@ namespace AirlockDoor
         public static bool didStartupBuilding;
         public static bool didStartupDb;
 
-        public static class Mod_OnLoad
+        public class AirlockMod : KMod.UserMod2
         {
-            public static void OnLoad()
+            public override void OnLoad(Harmony harmony)
             {
+                harmony.PatchAll();
+                AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName, AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
+                AddBuildingToBuildMenu("Base", AirlockDoorConfig.ID);
+                Console.WriteLine($"[ AIRLOCK DOOR - MAIN ] OnLoad");
             }
         }
 
@@ -25,26 +30,27 @@ namespace AirlockDoor
         public static class GeneratedBuildings_LoadGeneratedBuildings_Path
         {
             //Vanilla
-            //public static void Prefix()
-            //{
-            //    if (!didStartupBuilding)
-            //    {
-
-            //        OniUtils.AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName,
-            //            AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
-            //        OniUtils.AddBuildingToBuildMenu("Base", AirlockDoorConfig.ID);
-            //        didStartupBuilding = true;
-            //    }
-            //}
-
-            //SpaceOut
             public static void Prefix()
             {
-                AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName,
-                    AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
-                AddBuildingToBuildMenu("Base", AirlockDoorConfig.ID);
-                didStartupBuilding = true;
+                if (!didStartupBuilding)
+                {
+                    Console.WriteLine($"[ AIRLOCK DOOR ] Prefix For Add Building");
+                    AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName,
+                        AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
+                    AddBuildingToBuildMenu("Base", AirlockDoorConfig.ID);
+                    didStartupBuilding = true;
+                }
             }
+
+            //SpaceOut
+            //public static void Postfix()
+            //{
+            //    Console.WriteLine($"[ AIRLOCK DOOR ] Prefix For Add Building");
+            //    AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName,
+            //        AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
+            //    AddBuildingToBuildMenu("Base", AirlockDoorConfig.ID);
+            //    didStartupBuilding = true;
+            //}
         }
 
         ////vanilla
@@ -68,6 +74,7 @@ namespace AirlockDoor
         {
             public static void Prefix()
             {
+                Console.WriteLine($"[ AIRLOCK DOOR ] {Db.Get().Techs.Get("DirectedAirStreams").unlockedItemIDs}");
                 Db.Get().Techs.Get("DirectedAirStreams").unlockedItemIDs.Add(AirlockDoorConfig.ID);
             }
         }
@@ -83,6 +90,7 @@ namespace AirlockDoor
 
         public static void AddBuildingToBuildMenu(HashedString category, string buildingid, string addAfterId = null)
         {
+            Console.WriteLine($"[ AIRLOCK DOOR ] AddBuildingToBuildMenu");
             var i = BUILDINGS.PLANORDER.FindIndex(x => x.category == category);
             if (i == -1)
             {
@@ -113,6 +121,7 @@ namespace AirlockDoor
 
         public static void AddBuildingStrings(string id, string name, string desc, string effect)
         {
+            Console.WriteLine($"[ AIRLOCK DOOR ] AddBuildingStrings");
             var id_up = id.ToUpperInvariant();
 
             Strings.Add($"STRINGS.BUILDINGS.PREFABS.{id_up}.NAME", UI.FormatAsLink(name, id));
