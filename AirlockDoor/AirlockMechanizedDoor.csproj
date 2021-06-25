@@ -70,6 +70,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assembly-ONI\Assembly-CSharp-firstpass.dll" />
+    <Content Include="Assembly-ONI\Assembly-CSharp.dll" />
+    <Content Include="Reference\Unity.TextMeshPro.dll" />
+    <Content Include="Reference\UnityEngine.CoreModule.dll" />
+    <Content Include="Reference\UnityEngine.dll" />
+    <Content Include="Reference\UnityEngine.ImageConversionModule.dll" />
+    <Content Include="Reference\UnityEngine.UI.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

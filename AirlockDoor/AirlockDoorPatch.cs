@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using System.Collections.Generic;
+using UnityEngine;
 using Database;
 using ProcGen;
 using STRINGS;
@@ -85,14 +86,12 @@ namespace AirlockDoor
             var i = BUILDINGS.PLANORDER.FindIndex(x => x.category == category);
             if (i == -1)
             {
-                OniLogger.LogLine($"Could not find building category '{category}'");
                 return;
             }
 
             var planorderlist = BUILDINGS.PLANORDER[i].data as IList<string>;
             if (planorderlist == null)
             {
-                OniLogger.LogLine($"Could not find planorder with the given index for '{category}'");
                 return;
             }
 
@@ -105,7 +104,6 @@ namespace AirlockDoor
                 var neigh_i = planorderlist.IndexOf(addAfterId);
                 if (neigh_i == -1)
                 {
-                    OniLogger.LogLine($"Could not find the building '{addAfterId}' to add '{buildingid}' after.");
                     return;
                 }
 
