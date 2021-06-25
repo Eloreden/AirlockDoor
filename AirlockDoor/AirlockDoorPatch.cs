@@ -34,7 +34,7 @@ namespace AirlockDoor
             {
                 if (!didStartupBuilding)
                 {
-                    Console.WriteLine($"[ AIRLOCK DOOR ] Prefix For Add Building");
+                    Console.WriteLine($"[ AIRLOCK DOOR - MAIN ] Prefix For Add Building");
                     AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName,
                         AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
                     AddBuildingToBuildMenu("Base", AirlockDoorConfig.ID);
@@ -74,7 +74,7 @@ namespace AirlockDoor
         {
             public static void Prefix()
             {
-                Console.WriteLine($"[ AIRLOCK DOOR ] {Db.Get().Techs.Get("DirectedAirStreams").unlockedItemIDs}");
+                Console.WriteLine($"[ AIRLOCK DOOR - MAIN ] {Db.Get().Techs.Get("DirectedAirStreams").unlockedItemIDs}");
                 Db.Get().Techs.Get("DirectedAirStreams").unlockedItemIDs.Add(AirlockDoorConfig.ID);
             }
         }
