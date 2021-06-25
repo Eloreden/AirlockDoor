@@ -22,7 +22,7 @@ namespace AirlockDoor
                 harmony.PatchAll();
                 AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName, AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
                 AddBuildingToBuildMenu("Base", AirlockDoorConfig.ID);
-                Console.WriteLine($"[ AIRLOCK DOOR - MAIN ] OnLoad");
+                Console.WriteLine($"[ AIRLOCK DOOR - Vanilla ] OnLoad");
             }
         }
 
@@ -34,7 +34,7 @@ namespace AirlockDoor
             {
                 if (!didStartupBuilding)
                 {
-                    Console.WriteLine($"[ AIRLOCK DOOR ] Prefix For Add Building");
+                    Console.WriteLine($"[ AIRLOCK DOOR - Vanilla ] Prefix For Add Building");
                     AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName,
                         AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
                     AddBuildingToBuildMenu("Base", AirlockDoorConfig.ID);
@@ -72,9 +72,9 @@ namespace AirlockDoor
         [HarmonyPatch(typeof(Db), "Initialize")]
         public static class Db_Initialize_Patch
         {
-            public static void Prefix()
+            public static void PostFix()
             {
-                Console.WriteLine($"[ AIRLOCK DOOR ] {Db.Get().Techs.Get("DirectedAirStreams").unlockedItemIDs}");
+                Console.WriteLine($"[ AIRLOCK DOOR - Vanilla ] {Db.Get().Techs.Get("DirectedAirStreams").unlockedItemIDs}");
                 Db.Get().Techs.Get("DirectedAirStreams").unlockedItemIDs.Add(AirlockDoorConfig.ID);
             }
         }
@@ -90,7 +90,7 @@ namespace AirlockDoor
 
         public static void AddBuildingToBuildMenu(HashedString category, string buildingid, string addAfterId = null)
         {
-            Console.WriteLine($"[ AIRLOCK DOOR ] AddBuildingToBuildMenu");
+            Console.WriteLine($"[ AIRLOCK DOOR - Vanilla ] AddBuildingToBuildMenu");
             var i = BUILDINGS.PLANORDER.FindIndex(x => x.category == category);
             if (i == -1)
             {

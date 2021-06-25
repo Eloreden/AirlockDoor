@@ -44,7 +44,7 @@ namespace AirlockDoor
             Door.ControlState controlState = Traverse.Create(__instance).Field("controlState").GetValue<Door.ControlState>();
             Door.DoorType doorType = __instance.doorType;
 
-            Debug.Log($"Door Control State: {controlState} - DoorType : {doorType}");
+            Debug.Log($"Vanilla - Door Control State: {controlState} - DoorType : {doorType}");
 
             if (doorType == Door.DoorType.Internal || controlState == Door.ControlState.Opened)
             { return true; }
@@ -59,7 +59,7 @@ namespace AirlockDoor
                 // On opening
                 if (is_door_open)
                 {
-                    Debug.Log("Opening");
+                    Debug.Log("Vanilla - Opening");
                     MethodInfo method_opened = AccessTools.Method(typeof(Door), "OnSimDoorOpened", null, null);
                     System.Action cb_opened = (System.Action)Delegate.CreateDelegate(typeof(System.Action), __instance, method_opened);
                     HandleVector<Game.CallbackInfo>.Handle handle = Game.Instance.callbackManager.Add(new Game.CallbackInfo(cb_opened, false));
@@ -68,7 +68,7 @@ namespace AirlockDoor
                 // On closing
                 else
                 {
-                    Debug.Log("Closing");
+                    Debug.Log("Vanilla - Closing");
                     MethodInfo method_closed = AccessTools.Method(typeof(Door), "OnSimDoorClosed", null, null);
                     System.Action cb_closed = (System.Action)Delegate.CreateDelegate(typeof(System.Action), __instance, method_closed);
                     HandleVector<Game.CallbackInfo>.Handle handle = Game.Instance.callbackManager.Add(new Game.CallbackInfo(cb_closed, false));
