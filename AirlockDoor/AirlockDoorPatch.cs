@@ -32,8 +32,7 @@ namespace AirlockDoor
                 if (!didStartupBuilding)
                 {
                     Console.WriteLine($"[ AIRLOCK DOOR - Vanilla ] Prefix For Add Building");
-                    AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName,
-                        AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
+                    AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName, AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
                     AddBuildingToBuildMenu("Base", AirlockDoorConfig.ID);
                     didStartupBuilding = true;
                 }
@@ -58,7 +57,6 @@ namespace AirlockDoor
             {
                 return;
             }
-
             var planorderlist = BUILDINGS.PLANORDER[i].data as IList<string>;
             if (planorderlist == null)
             {

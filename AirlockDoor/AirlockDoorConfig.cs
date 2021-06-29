@@ -36,7 +36,7 @@ namespace AirlockDoor
             buildingDef.PermittedRotations = PermittedRotations.R90;
             buildingDef.SceneLayer = Grid.SceneLayer.TileMain;
             buildingDef.ForegroundLayer = Grid.SceneLayer.InteriorWall;
-            buildingDef.LogicInputPorts = DoorConfig.CreateSingleInputPortList(new CellOffset(0, 0));
+            //buildingDef.LogicInputPorts = DoorConfig.CreateSingleInputPortList(new CellOffset(0, 0));
             SoundEventVolumeCache.instance.AddVolume("airlock_mechanized_door_kanim", "Open_DoorPressure", NOISE_POLLUTION.NOISY.TIER2);
             SoundEventVolumeCache.instance.AddVolume("airlock_mechanized_door_kanim", "Close_DoorPressure", NOISE_POLLUTION.NOISY.TIER2);
             return buildingDef;
