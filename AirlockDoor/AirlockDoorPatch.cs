@@ -71,7 +71,7 @@ namespace AirlockDoor
         {
             public static void Postfix()
             {
-                Console.WriteLine($"[ AIRLOCK DOOR - MAIN ] {Db.Get().Techs.TryGet("DirectedAirStreams").unlockedItemIDs}");
+                Console.WriteLine($"[ AIRLOCK DOOR - MAIN ] Inizialize- {Db.Get().Techs.TryGet("DirectedAirStreams").unlockedItemIDs} -----------------------------------------------");
                 Db.Get().Techs.TryGet("DirectedAirStreams").unlockedItemIDs.Add(AirlockDoorConfig.ID);
             }
         }
