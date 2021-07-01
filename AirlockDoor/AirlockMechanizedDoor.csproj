@@ -39,6 +39,7 @@
     <Compile Include="AirlockDoorConfig.cs" />
     <Compile Include="AirlockDoorPatch.cs" />
     <Compile Include="DoorMod.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

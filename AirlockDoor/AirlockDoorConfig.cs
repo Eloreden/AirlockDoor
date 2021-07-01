@@ -15,6 +15,12 @@ namespace AirlockDoor
         public const string Description = "A door isolate gas and liquids between tow room";
         public static string Effect = "This door prevents the passage of gas and liquids between two separate areas";
 
+        public AirlockDoorConfig()
+        {
+        }
+
+        
+
         public override BuildingDef CreateBuildingDef()
         {//door_external_kanim airlock_mechanized_door_kanim
             Console.WriteLine($"[ AIRLOCK DOOR Main ] CreateBuildingDef");
@@ -36,9 +42,9 @@ namespace AirlockDoor
             buildingDef.PermittedRotations = PermittedRotations.R90;
             buildingDef.SceneLayer = Grid.SceneLayer.TileMain;
             buildingDef.ForegroundLayer = Grid.SceneLayer.InteriorWall;
-            //buildingDef.LogicInputPorts = DoorConfig.CreateSingleInputPortList(new CellOffset(0, 0));
-            SoundEventVolumeCache.instance.AddVolume("airlock_mechanized_door_kanim", "Open_DoorPressure", NOISE_POLLUTION.NOISY.TIER2);
-            SoundEventVolumeCache.instance.AddVolume("airlock_mechanized_door_kanim", "Close_DoorPressure", NOISE_POLLUTION.NOISY.TIER2);
+            buildingDef.LogicInputPorts = null;
+            SoundEventVolumeCache.instance.AddVolume("door_external_kanim", "Open_DoorPressure", NOISE_POLLUTION.NOISY.TIER2);
+            SoundEventVolumeCache.instance.AddVolume("door_external_kanim", "Close_DoorPressure", NOISE_POLLUTION.NOISY.TIER2);
             return buildingDef;
         }
 
