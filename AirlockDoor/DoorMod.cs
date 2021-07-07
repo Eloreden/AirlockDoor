@@ -5,18 +5,23 @@ using System.Reflection;
 
 namespace AirlockDoor
 {
-    //// Add anim override (necesary to prevent game crash)
-    //[HarmonyPatch(typeof(Door), "OnPrefabInit")]
-    //internal class AirlockDoor_OnPrefabInit
-    //{
-    //    private static void Postfix(ref Door __instance)
-    //    {
-    //        __instance.overrideAnims = new KAnimFile[]
-    //        {
-    //            Assets.GetAnim("airlock_mechanized_door_kanim")
-    //        };
-    //    }
-    //}
+    // Add anim override (necesary to prevent game crash)
+    [HarmonyPatch(typeof(Door), "OnPrefabInit")]
+    internal class AirlockDoor_OnPrefabInit
+    {
+        private static void Postfix(ref Door __instance)
+        {
+            __instance.overrideAnims = new KAnimFile[]
+            {
+                Assets.GetAnim("airlock_mechanized_door_kanim")
+            };
+        }
+    }
+
+    public static class AirlockDoorCell
+    {
+        public static List<int> CellList { get; set; } = new List<int>();
+    }
 
     [HarmonyPatch(typeof(Door), "OnCleanUp")]
     internal class AirlockDoor_OnCleanUp
@@ -29,6 +34,17 @@ namespace AirlockDoor
             }
         }
     }
+
+    [HarmonyPatch(typeof(EntombedItemManager), "OnSolidChanged")]
+    internal class AirlockDoor_OnSolidChanged
+    {
+        private static bool Prefix(Door __instance, List<int> solid_changed_cells)
+        {
+
+            return true;
+        }
+    }
+
 
     [HarmonyPatch(typeof(Door), "SetSimState")]
     internal class AirlockDoor_SetSimState

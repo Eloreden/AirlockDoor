@@ -24,6 +24,8 @@ namespace AirlockDoor
             }
         }
 
+
+
         [HarmonyPatch(typeof(GeneratedBuildings), "LoadGeneratedBuildings")]
         public static class GeneratedBuildings_LoadGeneratedBuildings_Path
         {
@@ -39,31 +41,9 @@ namespace AirlockDoor
                 }
             }
 
-            //SpaceOut
-            //public static void Postfix()
-            //{
-            //    Console.WriteLine($"[ AIRLOCK DOOR ] Prefix For Add Building");
-            //    AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName,
-            //        AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
-            //    AddBuildingToBuildMenu("Base", AirlockDoorConfig.ID);
-            //    didStartupBuilding = true;
-            //}
         }
 
-        ////vanilla
-        //[HarmonyPatch(typeof(Db), "Initialize")]
-        //public static class Db_Initialize_Patch
-        //{
-        //    public static void Prefix()
-        //    {
-        //        if (!didStartupDb)
-        //        {
-        //            OniUtils.AddBuildingToTech("DirectedAirStreams", AirlockDoorConfig.ID);
-
-        //            didStartupDb = true;
-        //        }
-        //    }
-        //}
+      
 
         //Space Out
         [HarmonyPatch(typeof(Db), "Initialize")]
