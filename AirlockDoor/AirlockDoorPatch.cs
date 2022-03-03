@@ -7,7 +7,6 @@ using STRINGS;
 
 using BUILDINGS = TUNING.BUILDINGS;
 using System;
-using PeterHan.PLib.Buildings;
 
 namespace AirlockDoor
 {
