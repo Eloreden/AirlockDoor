@@ -91,7 +91,7 @@ namespace AirlockDoor
                     return;
                 }
 
-                ModUtil.AddBuildingToPlanScreen(category, buildingid);
+                planorderlist.Insert(neigh_i + 1, buildingid);
             }
         }
 
