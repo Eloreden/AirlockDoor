@@ -8,9 +8,9 @@ using UnityEngine;
 
 namespace AirlockDoor
 {
-    public class AirlockDoorConfig : IBuildingConfig
+    public class AirtightDoorConfig : PressureDoorConfig
     {
-        public const string ID = "AirlockMechanizedDoor";
+        public const string ID = "AirthigMechanizedDoor";
         public const string DisplayName = "Airtight Door";
         public const string Description = "A door isolate gas and liquids between tow room";
         public static string Effect = "This door prevents the passage of gas and liquids between two separate areas";
@@ -40,25 +40,6 @@ namespace AirlockDoor
             SoundEventVolumeCache.instance.AddVolume("airlock_mechanized_door_kanim", "Open_DoorPressure", NOISE_POLLUTION.NOISY.TIER2);
             SoundEventVolumeCache.instance.AddVolume("airlock_mechanized_door_kanim", "Close_DoorPressure", NOISE_POLLUTION.NOISY.TIER2);
             return buildingDef;
-        }
-
-        public override void DoPostConfigureComplete(GameObject go)
-        {
-            Door door = go.AddOrGet<Door>();
-            door.hasComplexUserControls = true;
-            door.unpoweredAnimSpeed = 0.65f;
-            door.poweredAnimSpeed = 5f;
-            door.doorClosingSoundEventName = "MechanizedAirlock_closing";
-            door.doorOpeningSoundEventName = "MechanizedAirlock_opening";
-            go.AddOrGet<ZoneTile>();
-            go.AddOrGet<AccessControl>();
-            go.AddOrGet<KBoxCollider2D>();
-            Prioritizable.AddRef(go);
-            go.AddOrGet<CopyBuildingSettings>().copyGroupTag = GameTags.Door;
-            go.AddOrGet<Workable>().workTime = 5f;
-            UnityEngine.Object.DestroyImmediate((UnityEngine.Object)go.GetComponent<BuildingEnabledButton>());
-            go.GetComponent<AccessControl>().controlEnabled = true;
-            go.GetComponent<KBatchedAnimController>().initialAnim = "closed";
         }
     }
 }

@@ -10,7 +10,7 @@ using System;
 
 namespace AirlockDoor
 {
-    public class AirlockDoorPatch
+    public class AirtightPatch
     {
         public static bool didStartupBuilding;
         public static bool didStartupDb;
@@ -20,11 +20,9 @@ namespace AirlockDoor
             public override void OnLoad(Harmony harmony)
             {
                 harmony.PatchAll();
-                Console.WriteLine($"[ AIRLOCK DOOR - MAIN ] OnLoad");
+                Console.WriteLine($"[ AIRLOCK Half DOOR - MAIN ] OnLoad");
             }
         }
-
-
 
         [HarmonyPatch(typeof(GeneratedBuildings), "LoadGeneratedBuildings")]
         public static class GeneratedBuildings_LoadGeneratedBuildings_Path
@@ -35,15 +33,15 @@ namespace AirlockDoor
                 if (!didStartupBuilding)
                 {
                     Console.WriteLine($"[ AIRLOCK DOOR - MAIN ] Prefix For Add Building");
-                    AddBuildingStrings(AirlockDoorConfig.ID, AirlockDoorConfig.DisplayName, AirlockDoorConfig.Description, AirlockDoorConfig.Effect);
-                    AddBuildingToBuildMenu("Base", AirlockDoorConfig.ID);
+                    AddBuildingStrings(AirtighHalfDoorConfig.ID, AirtighHalfDoorConfig.DisplayName, AirtighHalfDoorConfig.Description, AirtighHalfDoorConfig.Effect);
+                    AddBuildingToBuildMenu("Base", AirtighHalfDoorConfig.ID);
+
+                    AddBuildingStrings(AirtightDoorConfig.ID, AirtightDoorConfig.DisplayName, AirtightDoorConfig.Description, AirtightDoorConfig.Effect);
+                    AddBuildingToBuildMenu("Base", AirtightDoorConfig.ID);
                     didStartupBuilding = true;
                 }
             }
-
         }
-
-
 
         //Space Out
         [HarmonyPatch(typeof(Db), "Initialize")]
@@ -51,18 +49,13 @@ namespace AirlockDoor
         {
             public static void Postfix()
             {
-                Db.Get().Techs.TryGet("DirectedAirStreams").unlockedItemIDs.Add(AirlockDoorConfig.ID);
+                Db.Get().Techs.TryGet("DirectedAirStreams").unlockedItemIDs.Add(AirtightDoorConfig.ID);
+                Db.Get().Techs.TryGet("DirectedAirStreams").unlockedItemIDs.Add(AirtighHalfDoorConfig.ID);
             }
         }
 
         #region Add Building to Menu
-        //Vanilla
-        //public static void AddBuildingToTech(string tech, string buildingid)
-        //{
-        //    var techlist = new List<string>(Techs.TECH_GROUPING[tech]);
-        //    techlist.Add(buildingid);
-        //    Techs.TECH_GROUPING[tech] = techlist.ToArray();
-        //}
+
 
         public static void AddBuildingToBuildMenu(HashedString category, string buildingid, string addAfterId = null)
         {

@@ -11,7 +11,7 @@ namespace AirlockDoor
     {
         private static void Postfix(ref Door __instance)
         {
-            if (__instance.gameObject.ToString().Contains("AirlockMechanizedDoorComplete"))
+            if (__instance.gameObject.ToString().Contains("Airthig"))
             {
                 __instance.overrideAnims = new KAnimFile[]
                 {
@@ -27,24 +27,27 @@ namespace AirlockDoor
     {
         private static void Postfix(Door __instance)
         {
+
+            Console.WriteLine($" Log Door Instance: {__instance.gameObject.ToString()} ");
+
             // If the attached gameobject doesn't exist, exit here
             if (__instance.gameObject == null) return;
 
-            if (!__instance.gameObject.ToString().Contains("AirlockMechanizedDoorComplete"))
+            if (!__instance.gameObject.ToString().Contains("Airthig"))
                 return;
 
             Door.DoorType doorType = __instance.doorType;
-            if (doorType <= Door.DoorType.ManualPressure || doorType == Door.DoorType.Sealed)
+            //if (doorType > Door.DoorType.ManualPressure || doorType == Door.DoorType.Sealed)
+            //{
+            for (var i = 0; i < __instance.building.PlacementCells.Length; i++)
             {
-                for (var i = 0; i < __instance.building.PlacementCells.Length; i++)
-                {
-                    var offsetCell = __instance.building.PlacementCells[i];
-                    SimMessages.ClearCellProperties(offsetCell, 1);
-                    SimMessages.ClearCellProperties(offsetCell, 2);
-                    SimMessages.ClearCellProperties(offsetCell, 4);
-                    SimMessages.SetCellProperties(offsetCell, (byte)(__instance.CurrentState == Door.ControlState.Auto ? 7 : 4));
-                }
+                var offsetCell = __instance.building.PlacementCells[i];
+                SimMessages.ClearCellProperties(offsetCell, 1);
+                SimMessages.ClearCellProperties(offsetCell, 2);
+                SimMessages.ClearCellProperties(offsetCell, 4);
+                SimMessages.SetCellProperties(offsetCell, (byte)(__instance.CurrentState == Door.ControlState.Auto ? 7 : 4));
             }
+            //}
         }
     }
 }

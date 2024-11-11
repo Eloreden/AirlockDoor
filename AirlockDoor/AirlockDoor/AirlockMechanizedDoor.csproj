@@ -34,8 +34,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AirlockDoorConfig.cs" />
-    <Compile Include="AirlockDoorPatch.cs" />
+    <Compile Include="AirtightDoorConfig.cs" />
+    <Compile Include="AirtighHalfDoorConfig.cs" />
+    <Compile Include="AirtightPatch.cs" />
     <Compile Include="DoorMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
