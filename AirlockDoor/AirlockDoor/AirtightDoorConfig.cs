@@ -10,7 +10,7 @@ namespace AirlockDoor
 {
     public class AirtightDoorConfig : PressureDoorConfig
     {
-        public const string ID = "AirthigMechanizedDoor";
+        public const string ID = "AirlockMechanizedDoor";
         public const string DisplayName = "Airtight Door";
         public const string Description = "A door isolate gas and liquids between tow room";
         public static string Effect = "This door prevents the passage of gas and liquids between two separate areas";

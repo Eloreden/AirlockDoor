@@ -6,7 +6,7 @@ namespace AirlockDoor
 {
     public class AirtighHalfDoorConfig : PressureDoorConfig
     {
-        public const string ID = "AirthigHalfMechanizedDoor";
+        public const string ID = "AirlockHalfMechanizedDoor";
         public const string DisplayName = "Airtight half Door";
         public const string Description = "An half door isolate gas and liquids between tow room";
         public static string Effect = "This door prevents the passage of gas and liquids between two separate areas";
