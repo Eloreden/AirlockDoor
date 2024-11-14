@@ -1,8 +1,4 @@
-﻿using HarmonyLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using TUNING;
 using UnityEngine;
 
@@ -20,7 +16,7 @@ namespace AirlockDoor
             Console.WriteLine($"[ AIRLOCK HALF DOOR Main ] CreateBuildingDef");
             int width = 1;
             int height = 1;
-            string anim = "airlock_mechanized_door_kanim";
+            string anim = "half_airlock_mechanized_door_kanim";
             int hitpoint = 30;
             float construction_time = 30f;
             float[] tier = BUILDINGS.CONSTRUCTION_MASS_KG.TIER4;
@@ -42,8 +38,8 @@ namespace AirlockDoor
             buildingDef.SceneLayer = Grid.SceneLayer.TileMain;
             buildingDef.ForegroundLayer = Grid.SceneLayer.InteriorWall;
             buildingDef.LogicInputPorts = DoorConfig.CreateSingleInputPortList(new CellOffset(0, 0));
-            SoundEventVolumeCache.instance.AddVolume("half_airlock_mechanized_door", "Open_DoorPressure", NOISE_POLLUTION.NOISY.TIER2);
-            SoundEventVolumeCache.instance.AddVolume("half_airlock_mechanized_door", "Close_DoorPressure", NOISE_POLLUTION.NOISY.TIER2);
+            SoundEventVolumeCache.instance.AddVolume("airlock_mechanized_door_kanim", "Open_DoorPressure", NOISE_POLLUTION.NOISY.TIER2);
+            SoundEventVolumeCache.instance.AddVolume("airlock_mechanized_door_kanim", "Close_DoorPressure", NOISE_POLLUTION.NOISY.TIER2);
             return buildingDef;
         }
 
