@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿
+using HarmonyLib;
 using System.Collections.Generic;
 using UnityEngine;
 using Database;
@@ -20,6 +21,7 @@ namespace AirlockDoor
             public override void OnLoad(Harmony harmony)
             {
                 harmony.PatchAll();
+                AirlockDoorConfig.AddStrings();
                 Console.WriteLine($"------------------- [ AIRLOCK DOOR - Vanilla ] OnLoad");
             }
         }
@@ -33,7 +35,7 @@ namespace AirlockDoor
             }
             public static void Postfix()
             {
-                Helpers.doorBuildMenu("AirlockMechanizedDoor", "Base", "PressureDoor");
+                Helpers.doorBuildMenu("AirlockMechanizedDoor", "Base", "doors", "PressureDoor");
                 Helpers.doorTechTree("AirlockMechanizedDoor", "HVAC");
             }
         }

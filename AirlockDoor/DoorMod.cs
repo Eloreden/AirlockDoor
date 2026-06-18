@@ -12,6 +12,11 @@ namespace AirlockDoor
     {
         private static void Postfix(ref Door __instance)
         {
+            // Applica l'override anim SOLO alla nostra porta, altrimenti tutte le porte
+            // vanilla userebbero l'animazione dell'airlock.
+            if (!Helpers.IsAirlockDoor(__instance))
+                return;
+
             __instance.overrideAnims = new KAnimFile[]
             {
                 Assets.GetAnim("airlock_mechanized_door_kanim")
@@ -24,15 +29,18 @@ namespace AirlockDoor
     {
         private static bool Prefix(Door __instance)
         {
-            if (__instance.gameObject == null)
-                return true;
-
-            if (!__instance.gameObject.ToString().Contains("AirlockMechanizedDoorComplete"))
+            if (!Helpers.IsAirlockDoor(__instance))
                 return true;
 
             foreach (int cell in __instance.building.PlacementCells)
             {
-                SimMessages.ClearCellProperties(cell, 3);
+                // Azzera i bit impermeabile (4) + porta (8), come fa Door.OnCleanUp vanilla.
+                // (prima azzerava 3 = bit 1+2, che NON includono il bit impermeabile -> la cella restava sigillata)
+                SimMessages.ClearCellProperties(cell, 12);
+                // Rimuovi la massa solida piazzata dalla porta, così gas/liquidi tornano a passare.
+                if (Grid.Element[cell].IsSolid)
+                    SimMessages.ReplaceAndDisplaceElement(cell, SimHashes.Vacuum, CellEventLogger.Instance.DoorOpen, 0f);
+                Pathfinding.Instance.AddDirtyNavGridCell(cell);
             }
             return true;
         }
@@ -45,7 +53,12 @@ namespace AirlockDoor
         public static bool Prefix(Door __instance, float dt)
         {
 
-            if ((UnityEngine.Object)__instance == (UnityEngine.Object)null)
+            if (__instance == null)
+                return true;
+
+            // Salta il Sim200ms vanilla SOLO per la nostra porta. Per tutte le altre porte
+            // deve girare l'originale, altrimenti si rompono automazione/melt check/refresh liquidi.
+            if (!Helpers.IsAirlockDoor(__instance))
                 return true;
 
             return false;
@@ -100,22 +113,8 @@ namespace AirlockDoor
     {
         private static bool Prefix(Door __instance, bool is_door_open, IList<int> cells)
         {
-            if (__instance.gameObject == null)
+            if (!Helpers.IsAirlockDoor(__instance))
                 return true;
-
-            if (!__instance.gameObject.ToString().Contains("AirlockMechanizedDoorComplete"))
-            {
-                Console.WriteLine($"MESSAGGIO CHE NON DEVE FAR COMPARIRE ALTRO: {__instance.gameObject}");
-                return true;
-            }
-
-            Door.ControlState controlState = Traverse.Create(__instance).Field("controlState").GetValue<Door.ControlState>();
-
-            Debug.Log($"Vanilla - Door Control State: {controlState} - DoorType : {__instance.doorType} - Cells:{cells[0]}");
-
-            //if (doorType == Door.DoorType.Internal || controlState == Door.ControlState.Opened)
-            //{ return true; }
-
 
             PrimaryElement element = __instance.GetComponent<PrimaryElement>();
             float mass_per_cell = element.Mass / cells.Count;

@@ -11,15 +11,27 @@ namespace AirlockDoor
     public class AirlockDoorConfig : IBuildingConfig
     {
         public const string ID = "AirlockMechanizedDoor";
-        public const string DisplayName = "Airlock DoorDebug";
-        public const string Description = "A door isolate gas and liquids between tow room";
+        public const string DisplayName = "Airlock Door";
+        public const string Description = "A door that isolates gas and liquids between two rooms.";
         public static string Effect = "This door prevents the passage of gas and liquids between two separate areas";
 
         public AirlockDoorConfig()
         {
         }
 
-        
+        // Registra le stringhe localizzate dell'edificio. Senza queste ONI mostra
+        // "MISSING.STRINGS.BUILDINGS.PREFABS.AIRLOCKMECHANIZEDDOOR.NAME" ecc.
+        // Le chiavi devono essere STRINGS.BUILDINGS.PREFABS.<ID_MAIUSCOLO>.NAME/DESC/EFFECT
+        // (vedi BuildingDef.Name/Desc/Effect). Uso ID.ToUpper() come fa il gioco.
+        public static void AddStrings()
+        {
+            string upper = ID.ToUpper();
+            Strings.Add("STRINGS.BUILDINGS.PREFABS." + upper + ".NAME", DisplayName);
+            Strings.Add("STRINGS.BUILDINGS.PREFABS." + upper + ".DESC", Description);
+            Strings.Add("STRINGS.BUILDINGS.PREFABS." + upper + ".EFFECT", Effect);
+        }
+
+
 
         public override BuildingDef CreateBuildingDef()
         {//door_external_kanim airlock_mechanized_door_kanim
