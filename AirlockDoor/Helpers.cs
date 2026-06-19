@@ -25,15 +25,40 @@ namespace AirlockDoor
 
         // Vera identita' della porta: confronta il PrefabTag (= AirlockDoorConfig.ID), stabile
         // anche sulle istanze in gioco (il name ha il suffisso "(Clone)").
+        // ATTENZIONE: matcha SOLO il full door. Le patch fisiche (OnCleanUp/Sim200ms/
+        // SetSimState) devono restare scoped al full door; la half door estende
+        // PressureDoorConfig e usa la fisica vanilla della porta a pressione.
         public static bool IsAirlockDoor(Door door)
         {
+            return GetPrefabId(door) == AirlockDoorConfig.ID;
+        }
+
+        // Restituisce il PrefabTag.Name della porta (o il name del GameObject come
+        // fallback se il tag non e' ancora pronto), oppure null.
+        private static string GetPrefabId(Door door)
+        {
             if (door == null || door.gameObject == null)
-                return false;
+                return null;
             KPrefabID kpid = door.GetComponent<KPrefabID>();
             if (kpid != null && kpid.PrefabTag.IsValid)
-                return kpid.PrefabTag.Name == AirlockDoorConfig.ID;
-            // fallback nel caso il PrefabTag non sia ancora pronto
-            return door.gameObject.name.Contains(AirlockDoorConfig.ID);
+                return kpid.PrefabTag.Name;
+            return door.gameObject.name;
+        }
+
+        // Anim override da applicare in Door.OnPrefabInit (necessario per evitare il crash).
+        // Vale sia per il full door sia per la half door, ognuna con la propria kanim.
+        // Restituisce null per tutte le altre porte (nessun override).
+        public static string GetOverrideAnim(Door door)
+        {
+            string id = GetPrefabId(door);
+            if (id == null)
+                return null;
+            // confronto esatto, con fallback Contains per il caso "(Clone)"
+            if (id == AirlockHalfDoorConfig.ID || id.Contains(AirlockHalfDoorConfig.ID))
+                return "half_airlock_mechanized_door_kanim";
+            if (id == AirlockDoorConfig.ID || id.Contains(AirlockDoorConfig.ID))
+                return "airlock_mechanized_door_kanim";
+            return null;
         }
 
     }

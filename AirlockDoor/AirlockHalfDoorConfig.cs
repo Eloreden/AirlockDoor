@@ -10,7 +10,7 @@ namespace AirlockDoor
     // (OnCleanUp/Sim200ms/SetSimState) di DoorMod: gli serve solo l'override anim.
     public class AirlockHalfDoorConfig : PressureDoorConfig
     {
-        public const string ID = "AirlockHalfMechanizedDoor";
+        public new const string ID = "AirlockHalfMechanizedDoor";
         public const string DisplayName = "Airlock Half Door";
         public const string Description = "A half door that isolates gas and liquids between two rooms.";
         public static string Effect = "This door prevents the passage of gas and liquids between two separate areas";

@@ -12,14 +12,15 @@ namespace AirlockDoor
     {
         private static void Postfix(ref Door __instance)
         {
-            // Applica l'override anim SOLO alla nostra porta, altrimenti tutte le porte
-            // vanilla userebbero l'animazione dell'airlock.
-            if (!Helpers.IsAirlockDoor(__instance))
+            // Applica l'override anim SOLO alle nostre porte (full + half), ognuna con la
+            // propria kanim. Per tutte le altre porte vanilla GetOverrideAnim ritorna null.
+            string anim = Helpers.GetOverrideAnim(__instance);
+            if (anim == null)
                 return;
 
             __instance.overrideAnims = new KAnimFile[]
             {
-                Assets.GetAnim("airlock_mechanized_door_kanim")
+                Assets.GetAnim(anim)
             };
         }
     }

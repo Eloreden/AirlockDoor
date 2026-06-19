@@ -22,6 +22,7 @@ namespace AirlockDoor
             {
                 harmony.PatchAll();
                 AirlockDoorConfig.AddStrings();
+                AirlockHalfDoorConfig.AddStrings();
                 Console.WriteLine($"------------------- [ AIRLOCK DOOR - Vanilla ] OnLoad");
             }
         }
@@ -37,6 +38,9 @@ namespace AirlockDoor
             {
                 Helpers.doorBuildMenu("AirlockMechanizedDoor", "Base", "doors", "PressureDoor");
                 Helpers.doorTechTree("AirlockMechanizedDoor", "HVAC");
+                // half door: subito dopo il full door, stessa categoria/tech
+                Helpers.doorBuildMenu("AirlockHalfMechanizedDoor", "Base", "doors", "AirlockMechanizedDoor");
+                Helpers.doorTechTree("AirlockHalfMechanizedDoor", "HVAC");
             }
         }
     }
