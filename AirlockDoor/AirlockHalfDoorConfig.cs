@@ -4,12 +4,25 @@ using UnityEngine;
 
 namespace AirlockDoor
 {
-    public class AirtighHalfDoorConfig : PressureDoorConfig
+    // Half door: a differenza del full door (AirlockDoorConfig, IBuildingConfig "nudo"),
+    // questa estende PressureDoorConfig e quindi eredita gia' la fisica airtight della
+    // porta a pressione vanilla. Per questo NON ha bisogno delle patch fisiche custom
+    // (OnCleanUp/Sim200ms/SetSimState) di DoorMod: gli serve solo l'override anim.
+    public class AirlockHalfDoorConfig : PressureDoorConfig
     {
         public const string ID = "AirlockHalfMechanizedDoor";
-        public const string DisplayName = "Airtight half Door";
-        public const string Description = "An half door isolate gas and liquids between tow room";
+        public const string DisplayName = "Airlock Half Door";
+        public const string Description = "A half door that isolates gas and liquids between two rooms.";
         public static string Effect = "This door prevents the passage of gas and liquids between two separate areas";
+
+        // Vedi AirlockDoorConfig.AddStrings: senza queste ONI mostra MISSING.STRINGS.*
+        public static void AddStrings()
+        {
+            string upper = ID.ToUpper();
+            Strings.Add("STRINGS.BUILDINGS.PREFABS." + upper + ".NAME", DisplayName);
+            Strings.Add("STRINGS.BUILDINGS.PREFABS." + upper + ".DESC", Description);
+            Strings.Add("STRINGS.BUILDINGS.PREFABS." + upper + ".EFFECT", Effect);
+        }
 
         public override BuildingDef CreateBuildingDef()
         {//door_external_kanim airlock_mechanized_door_kanim
@@ -46,7 +59,7 @@ namespace AirlockDoor
         public override void DoPostConfigureComplete(GameObject go)
         {
             base.DoPostConfigureComplete(go);
-            go.AddComponent<KAminControllerResize>().height = 0.5f; 
+            go.AddComponent<KAminControllerResize>().height = 0.5f;
         }
         public override void DoPostConfigurePreview(BuildingDef def, GameObject go)
         {
