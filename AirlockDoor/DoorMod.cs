@@ -18,9 +18,21 @@ namespace AirlockDoor
             if (anim == null)
                 return;
 
+            // Door eredita da Workable, quindi overrideAnims e' il campo usato anche da
+            // StandardWorker.AttachOverrideAnims quando un dupe opera la porta. Se Assets.GetAnim
+            // ritorna null (kanim non ancora caricata, dipende dall'ordine delle mod), iniettare
+            // un elemento null qui causa "AddAnimOverrides tried to add a null override" al primo
+            // dupe che interagisce. In quel caso lasciamo l'override vanilla (anim_use_remote_kanim).
+            KAnimFile animFile = Assets.GetAnim(anim);
+            if (animFile == null)
+            {
+                Debug.LogWarning($"[AirlockDoor] kanim '{anim}' non trovata in OnPrefabInit: mantengo l'override vanilla.");
+                return;
+            }
+
             __instance.overrideAnims = new KAnimFile[]
             {
-                Assets.GetAnim(anim)
+                animFile
             };
         }
     }
