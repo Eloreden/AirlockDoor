@@ -12,28 +12,25 @@ namespace AirlockDoor
     {
         private static void Postfix(ref Door __instance)
         {
-            // Applica l'override anim SOLO alle nostre porte (full + half), ognuna con la
-            // propria kanim. Per tutte le altre porte vanilla GetOverrideAnim ritorna null.
-            string anim = Helpers.GetOverrideAnim(__instance);
-            if (anim == null)
-                return;
-
-            // Door eredita da Workable, quindi overrideAnims e' il campo usato anche da
-            // StandardWorker.AttachOverrideAnims quando un dupe opera la porta. Se Assets.GetAnim
-            // ritorna null (kanim non ancora caricata, dipende dall'ordine delle mod), iniettare
-            // un elemento null qui causa "AddAnimOverrides tried to add a null override" al primo
-            // dupe che interagisce. In quel caso lasciamo l'override vanilla (anim_use_remote_kanim).
-            KAnimFile animFile = Assets.GetAnim(anim);
-            if (animFile == null)
+            // Door eredita da Workable: overrideAnims e' l'animazione del DUPE che opera la porta
+            // (NON l'aspetto dell'edificio, che arriva dal BuildingDef). In vanilla vale il campo
+            // statico condiviso Door.OVERRIDE_ANIMS = [ Assets.GetAnim("anim_use_remote_kanim") ].
+            //
+            // Se quel campo statico viene inizializzato prima che gli anim siano caricati, resta
+            // [null] per SEMPRE e ogni porta (vanilla incluse) logga "AddAnimOverrides tried to add
+            // a null override" quando un dupe la opera. Qui ripariamo: se manca, rimettiamo l'anim
+            // vera del dupe (a save/spawn gli anim sono gia' caricati). Vale per tutte le porte,
+            // cosi' sistemiamo anche quelle vanilla, non solo le nostre.
+            if (__instance.overrideAnims == null
+                || __instance.overrideAnims.Length == 0
+                || __instance.overrideAnims[0] == null)
             {
-                Debug.LogWarning($"[AirlockDoor] kanim '{anim}' non trovata in OnPrefabInit: mantengo l'override vanilla.");
-                return;
+                KAnimFile useRemote = Assets.GetAnim("anim_use_remote_kanim");
+                if (useRemote != null)
+                    __instance.overrideAnims = new KAnimFile[] { useRemote };
+                else
+                    Debug.LogWarning("[AirlockDoor] anim_use_remote_kanim non trovata: impossibile riparare l'override del dupe.");
             }
-
-            __instance.overrideAnims = new KAnimFile[]
-            {
-                animFile
-            };
         }
     }
 
@@ -148,6 +145,19 @@ namespace AirlockDoor
                             System.Action cb_opened = (System.Action)Delegate.CreateDelegate(typeof(System.Action), __instance, method_opened);
                             HandleVector<Game.CallbackInfo>.Handle handle = Game.Instance.callbackManager.Add(new Game.CallbackInfo(cb_opened));
                             SimMessages.Dig(cell, handle.index, true);
+
+                            // Solo se la porta e' BLOCCATA APERTA dal giocatore (ControlState.Opened)
+                            // lasciamo passare tutto: azzeriamo il bit impermeabile (4) e NON ri-riempiamo
+                            // la cella di solido, cosi' gas e liquidi attraversano.
+                            // Nel passaggio TRANSITORIO di un dupe (Auto) manteniamo il comportamento
+                            // airlock: la cella resta sigillata (vedi sotto).
+                            if (__instance.CurrentState == Door.ControlState.Opened)
+                            {
+                                SimMessages.ClearCellProperties(cell, 4);
+                                Pathfinding.Instance.AddDirtyNavGridCell(cell);
+                                break;
+                            }
+
                             if (__instance.ShouldBlockFallingSand)
                             {
                                 SimMessages.ClearCellProperties(cell, 4);

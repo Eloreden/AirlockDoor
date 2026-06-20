@@ -45,21 +45,5 @@ namespace AirlockDoor
             return door.gameObject.name;
         }
 
-        // Anim override da applicare in Door.OnPrefabInit (necessario per evitare il crash).
-        // Vale sia per il full door sia per la half door, ognuna con la propria kanim.
-        // Restituisce null per tutte le altre porte (nessun override).
-        public static string GetOverrideAnim(Door door)
-        {
-            string id = GetPrefabId(door);
-            if (id == null)
-                return null;
-            // confronto esatto, con fallback Contains per il caso "(Clone)"
-            if (id == AirlockHalfDoorConfig.ID || id.Contains(AirlockHalfDoorConfig.ID))
-                return "half_airlock_mechanized_door_kanim";
-            if (id == AirlockDoorConfig.ID || id.Contains(AirlockDoorConfig.ID))
-                return "airlock_mechanized_door_kanim";
-            return null;
-        }
-
     }
 }
