@@ -39,7 +39,7 @@ namespace AirlockDoor
     {
         private static bool Prefix(Door __instance)
         {
-            if (!Helpers.IsAirlockDoor(__instance))
+            if (!Helpers.IsOurDoor(__instance))
                 return true;
 
             foreach (int cell in __instance.building.PlacementCells)
@@ -66,8 +66,11 @@ namespace AirlockDoor
             if (__instance == null)
                 return true;
 
-            // Salta il Sim200ms vanilla SOLO per la nostra porta. Per tutte le altre porte
-            // deve girare l'originale, altrimenti si rompono automazione/melt check/refresh liquidi.
+            // Salta il Sim200ms vanilla SOLO per la full door. NON lo saltiamo per la half door:
+            // la half ha la porta logica (LogicInputPorts) e l'automazione viene applicata proprio
+            // qui (applyLogicChange -> ApplyRequestedControlState). Saltarlo le romperebbe
+            // l'automazione. La full door non ha automazione (LogicInputPorts = null), quindi e' safe.
+            // (Il melt check non scatta: entrambe Overheatable = false.)
             if (!Helpers.IsAirlockDoor(__instance))
                 return true;
 
@@ -123,7 +126,7 @@ namespace AirlockDoor
     {
         private static bool Prefix(Door __instance, bool is_door_open, IList<int> cells)
         {
-            if (!Helpers.IsAirlockDoor(__instance))
+            if (!Helpers.IsOurDoor(__instance))
                 return true;
 
             PrimaryElement element = __instance.GetComponent<PrimaryElement>();
@@ -158,11 +161,13 @@ namespace AirlockDoor
                                 break;
                             }
 
-                            if (__instance.ShouldBlockFallingSand)
-                            {
-                                SimMessages.ClearCellProperties(cell, 4);
-                                break;
-                            }
+                            // NB: NON replichiamo il ramo vanilla `ShouldBlockFallingSand`.
+                            // ShouldBlockFallingSand e' true quando la porta e' RUOTATA (orizzontale):
+                            // in vanilla quel ramo si limita a togliere il bit impermeabile (4) senza
+                            // risigillare la cella, cosi' la pressure door orizzontale aperta lascia
+                            // passare gas/liquidi (si comporta come una botola). Per la NOSTRA porta
+                            // airlock vogliamo invece restare a tenuta anche in orizzontale: cadiamo
+                            // sempre nel ramo di risigillatura (ReplaceAndDisplaceElement + bit 4).
                             HandleVector<Game.CallbackInfo>.Handle handle2 = Game.Instance.callbackManager.Add(new Game.CallbackInfo(cb_opened));
                             SimMessages.ReplaceAndDisplaceElement(cell, element.ElementID, CellEventLogger.Instance.DoorClose, mass_per_cell, element.Temperature, byte.MaxValue, 0, handle2.index);
                             SimMessages.SetCellProperties(cell, 4);

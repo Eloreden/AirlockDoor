@@ -23,14 +23,26 @@ namespace AirlockDoor
             Db.Get().Techs.TryGet(group)?.unlockedItemIDs.Add(door);
         }
 
-        // Vera identita' della porta: confronta il PrefabTag (= AirlockDoorConfig.ID), stabile
-        // anche sulle istanze in gioco (il name ha il suffisso "(Clone)").
-        // ATTENZIONE: matcha SOLO il full door. Le patch fisiche (OnCleanUp/Sim200ms/
-        // SetSimState) devono restare scoped al full door; la half door estende
-        // PressureDoorConfig e usa la fisica vanilla della porta a pressione.
+        // Vera identita' della porta: confronta il PrefabTag, stabile anche sulle istanze in
+        // gioco (il name ha il suffisso "(Clone)"). Matcha SOLO il full door.
         public static bool IsAirlockDoor(Door door)
         {
             return GetPrefabId(door) == AirlockDoorConfig.ID;
+        }
+
+        // Half door (AirlockHalfMechanizedDoor): estende PressureDoorConfig.
+        public static bool IsAirlockHalfDoor(Door door)
+        {
+            return GetPrefabId(door) == AirlockHalfDoorConfig.ID;
+        }
+
+        // Una delle NOSTRE porte (full o half). La fisica airlock condivisa (SetSimState +
+        // OnCleanUp) e' scoped qui, cosi' le due porte hanno lo stesso comportamento.
+        // NB: Sim200ms resta scoped al solo full door (vedi DoorMod): la half ha la porta
+        // logica (automazione) che vive proprio nel Sim200ms vanilla.
+        public static bool IsOurDoor(Door door)
+        {
+            return IsAirlockDoor(door) || IsAirlockHalfDoor(door);
         }
 
         // Restituisce il PrefabTag.Name della porta (o il name del GameObject come
